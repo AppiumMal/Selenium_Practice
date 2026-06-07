@@ -7,10 +7,10 @@ import pytest
 
 logger = setup_logger() 
 
-@pytest.mark.parametrize("username, password", [("tester", "pytest"), ("admin","admin123"), ("guest","guest123")])
-class LoginPracticeTests:
+
+class TestLoginPractice:
       
-      def test_practice1(driver):
+      def test_practice1(self,driver):
     
        url =  r"file:///C:/Users/Malathy.Ranganathan/OneDrive - ZETES SA NV/AUTOMATION/pytest_fixtures/fixtures_practice.html"
 
@@ -20,8 +20,8 @@ class LoginPracticeTests:
        logger.info(f"Opened webpage: {url}")
 
     
-
-      def test_practice2(driver,username, password):
+      @pytest.mark.parametrize("username, password", [("tester", "pytest"), ("admin","admin123"), ("guest","guest123")])
+      def test_practice2(self, driver, username, password):
          logger.info("Starting login test_practice2")
 
          #Check if the page title is correct
