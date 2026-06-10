@@ -25,6 +25,8 @@ class TestLoginPractice:
       def test_practice2(self, driver, username, password):
          logger.info("Starting login test_practice2")
 
+         driver.get("file:///C:/Users/malathy.ranganathan/OneDrive%20-%20ZETES%20SA%20NV/AUTOMATION/pytest_fixtures/fixtures_practice.html")
+
          #Check if the page title is correct
          login_page = LoginPage(driver)#
 
@@ -36,7 +38,7 @@ class TestLoginPractice:
  
 
         # Verify dashboard visible
-         assert login_page.is_dashboard_visible(), "Dashboard should be visible after login"
+         assert login_page.get_success_message() == "Welcome! You are logged in."
          logger.info("Login successful, dashboard is visible") 
 
          #Logout after successful login
