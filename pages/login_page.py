@@ -1,49 +1,55 @@
 from selenium.webdriver.common.by import By
-from core.wait_helpers import( wait_for_element_present, wait_for_element_visible_and_enter_text, wait_for_element_visible_clickable)
+from core.actions import Actions
+from typing import Tuple
+Locator = Tuple[str,str]
+from core.wait_helpers import WaitHelpers
 
 class LoginPage:
-    def __init__(self, driver):
-        self.driver = driver
+
 
   #Locators for the login page elements
-    username_input = (By.ID, "username")
-    password_input = (By.ID, "password")
-    login_button = (By.CSS_SELECTOR, "button[onclick='login()']")
-    dashboard = (By.ID, "dashboard")
-    page_title = (By.TAG_NAME, "h1")
-    logout_button = (By.CSS_SELECTOR, "button[onclick='logout()']")
-    success_message = (By.CLASS_NAME, "message")
+    USERNAME :Locator =(By.ID, "username")
+    PASSWORD :Locator =(By.ID, "password")
+    LOGIN_BUTTON :Locator =(By.CSS_SELECTOR, "button[onclick='login()']")
+    DASHBOARD :Locator =(By.ID, "dashboard")
+    PAGE_TITLE :Locator =(By.TAG_NAME, "h1")
+    LOGOUT_BUTTON :Locator =(By.CSS_SELECTOR, "button[onclick='logout()']")
+    SUCESS_MESSAGE :Locator =(By.CLASS_NAME, "message")
+
+   
+    def __init__(self, driver):
+        self.driver = driver
+        self.wait = WaitHelpers(driver)
+        self.actions = Actions(driver, self.wait)
 
 
-        
-    def get_page_title(self):
-          by, value = self.page_title
-          return wait_for_element_present(self.driver, by, value).get_attribute("textContent")
+    def get_text(self, locator: Locator) -> str:
+          
+          return self.actions.get_text(locator)
 
-    def login(self, username, password):
+    def login(self, username:str, password:str):
     
          # username
-        by, value = self.username_input
-        wait_for_element_visible_and_enter_text(self.driver, by, value, username)
+       self.actions.type(self.USERNAME,username)
 
         # password
-        by, value = self.password_input
-        wait_for_element_visible_and_enter_text(self.driver, by, value, password)
+       self.actions.type(self.PASSWORD,password)
 
         # click login
-        by, value = self.login_button
-        wait_for_element_visible_clickable(self.driver, by, value)
 
-    def is_dashboard_visible(self):
-        by, value = self.dashboard
-        dashboard_element = wait_for_element_present(self.driver, by,value)
-        return dashboard_element.is_displayed()    
+       self.actions.click(self.LOGIN_BUTTON)
+  
+
+    def get_page_title(self) -> str:
+       return self.actions.get_text(self.PAGE_TITLE)
+
+    def get_success_message(self) -> str:
+       return self.actions.get_text(self.SUCESS_MESSAGE)
+
+
     
     def logout(self):
-        wait_for_element_visible_clickable(self.driver, self.logout_button)
+        self.actions.click(self.LOGOUT_BUTTON)
 
-    def get_success_message(self):
-        by, value = self.success_message
-        element = wait_for_element_present(self.driver, by, value)
-        return element.text
+
    

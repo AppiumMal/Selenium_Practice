@@ -9,3 +9,5 @@ def driver():
     driver.get(Config.BASE_URL)
     yield driver
     WebDriverSingleton.quit_driver()
+
+    
